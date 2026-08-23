@@ -15,6 +15,9 @@
     # on — exercises `keepPowered`, the warning it can trigger when
     # `sleep.allowed` is left true, and `nixpower-verify`'s per-device check.
     runtimePm.pci = true;
+    # Exercises the USB rule's device-vs-interface boundary. A USB interface has
+    # no power/control attribute and must never receive the assignment.
+    runtimePm.usb = true;
     runtimePm.keepPowered = [
       {
         vendor = "0x1002";

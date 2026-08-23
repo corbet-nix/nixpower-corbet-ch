@@ -94,6 +94,11 @@ re-enable runtime PM for its own device — `xhci_hcd` calls `pm_runtime_allow()
 `keepPowered` rules therefore match `ACTION=="add|bind"`: `bind` fires once the driver has had its
 say, which is where the pin actually sticks.
 
+**A USB subsystem event is not necessarily a USB device.** udev emits `add` for both `usb_device`
+objects and their `usb_interface` children. Only the device owns `power/control`; assigning the
+attribute on the interface logs an error and cannot apply policy. The USB autosuspend rule therefore
+requires both `ENV{DEVTYPE}=="usb_device"` and `TEST=="power/control"` before writing it.
+
 ## Verifying
 
 `nixpower-verify` runs after boot and reads every managed knob back from sysfs, logging `PASS`/`FAIL`

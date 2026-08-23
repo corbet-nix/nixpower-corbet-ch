@@ -303,7 +303,11 @@ in
         ACTION=="add", SUBSYSTEM=="pci", ATTR{power/control}="auto"''
       ++ lib.optional (cfg.runtimePm.keepPowered != [ ]) keepPoweredRules
       ++ lib.optional cfg.runtimePm.usb ''
-        ACTION=="add", SUBSYSTEM=="usb", ATTR{power/control}="auto"''
+        # A USB subsystem add event also fires for every usb_interface child. Those nodes do not
+        # expose power/control, so assigning it logs a udev error for every interface while doing
+        # nothing. DEVTYPE scopes policy to the usb_device object; TEST makes the attribute's
+        # existence an explicit precondition instead of relying on a failed ATTR assignment.
+        ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", TEST=="power/control", ATTR{power/control}="auto"''
       ++ lib.optional (cfg.cpu.energyPerformancePreference != null) ''
         ACTION=="add", SUBSYSTEM=="cpu", ATTR{cpufreq/energy_performance_preference}="${cfg.cpu.energyPerformancePreference}"''
     );

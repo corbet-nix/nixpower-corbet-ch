@@ -64,6 +64,16 @@ let
   staggerService = host.config.systemd.services.nixpower-diskstandby-wake-example-pool or null;
 
   results = [
+    # --- USB add events include device and interface nodes. Only the device owns power/control. ---
+    (check "nixos/usb-runtime-pm-targets-device-nodes-with-an-existing-attribute"
+      (
+        let usbLines = lib.filter (l: lib.hasInfix ''SUBSYSTEM=="usb"'' l)
+          (lib.splitString "\n" udevRules);
+        in
+        usbLines == [ ''ACTION=="add", SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", TEST=="power/control", ATTR{power/control}="auto"'' ]
+      )
+      "expected exactly one USB autosuspend rule gated by DEVTYPE=usb_device and TEST=power/control; a broad SUBSYSTEM=usb assignment also hits usb_interface children and logs one failed ATTR write per interface")
+
     # --- the standby-timer RUN+= line is present, scoped to rotational, non-USB block devices ---
     (check "disk-standby/udev-rule-scopes-rotational-non-usb"
       (lib.hasInfix ''ATTR{queue/rotational}=="1"'' udevRules
@@ -171,8 +181,13 @@ let
       ''
     else
       pkgs.runCommand "nixpower-eval-tests"
-        { passedCount = toString (builtins.length results); }
+        {
+          passedCount = toString (builtins.length results);
+          nativeBuildInputs = [ pkgs.systemd ];
+        }
         ''
+          printf '%s\n' ${lib.escapeShellArg udevRules} > "$TMPDIR/99-nixpower.rules"
+          udevadm verify --resolve-names=never "$TMPDIR/99-nixpower.rules"
           echo "all $passedCount nixpower eval tests passed"
           touch $out
         '';
