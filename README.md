@@ -105,8 +105,8 @@ requires both `ENV{DEVTYPE}=="usb_device"` and `TEST=="power/control"` before wr
 per knob. It was written because a SATA ALPM rule fired correctly for days while the kernel rejected
 every write, and nothing surfaced it.
 
-## License
+## Licence
 
-MIT.
+Outbound licence is `MIT OR Apache-2.0`. See `LICENSE-MIT` and `LICENSE-APACHE`; every source file carries `SPDX-License-Identifier: MIT OR Apache-2.0`.
 
 [sm]: https://github.com/numtide/system-manager

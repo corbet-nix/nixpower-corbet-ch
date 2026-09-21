@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 {
   description = "nixpower — one declarative power stance per host: sleep policy, runtime PM, and a verifier that reads every knob back";
 

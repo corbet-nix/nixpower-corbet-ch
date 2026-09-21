@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # The smallest NixOS configuration that composes nixpower's NixOS modules
 # together, used by every check in this flake.
 #

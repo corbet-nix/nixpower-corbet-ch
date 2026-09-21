@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # modules/disk-standby.nix
 #
 # Spin down idle rotational drives via the ATA standby timer, IN HARDWARE --

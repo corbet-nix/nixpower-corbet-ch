@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 # Throwaway eval smoke test -- NOT part of the module surface. Confirms the system-manager backend
 # evaluates and that `sleep.allowed = false` actually produces the full masked set, before any of it
 # is published. Safe to delete; nothing imports this file.

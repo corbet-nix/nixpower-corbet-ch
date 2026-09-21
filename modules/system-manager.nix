@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
 #
 # nixpower's sleep stance and native package intent for system-manager hosts, mirroring this
 # repo's own NixOS module (`modules/nixos.nix`).
